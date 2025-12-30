@@ -195,15 +195,39 @@ class RobotGorev:
             return False
 
     def raporu_yazdir(self):
-        rospy.loginfo("\n")
-        rospy.loginfo("╔════════════════════════════════════════╗")
-        rospy.loginfo("║          FİNAL TEMİZLİK RAPORU         ║")
-        rospy.loginfo("╠════════════════════════════════════════╣")
+        # Rapor içeriğini hazırla
+        satirlar = []
+        satirlar.append("\n")
+        satirlar.append("╔════════════════════════════════════════╗")
+        satirlar.append("║          FİNAL TEMİZLİK RAPORU         ║")
+        satirlar.append("╠════════════════════════════════════════╣")
+        
         for oda, durum in self.sonuc_raporu.items():
             bosluk = " " * (36 - len(oda) - len(durum))
-            rospy.loginfo(f"║ {oda}: {durum}{bosluk} ║")
-        rospy.loginfo("╚════════════════════════════════════════╝")
-        rospy.loginfo("\n")
+            satir = f"║ {oda}: {durum}{bosluk} ║"
+            satirlar.append(satir)
+            
+        satirlar.append("╚════════════════════════════════════════╝")
+        satirlar.append("\n")
+
+        # 1. TERMİNALE BAS (Hocanın videoda görmesi için)
+        for satir in satirlar:
+            rospy.loginfo(satir)
+
+        # 2. DOSYAYA KAYDET (Dosya çıktısı istediği için)
+        try:
+            # Dosyayı /home/muhammed/robotg_ws/src/final_odev/ konumuna kaydeder
+            rospack = rospkg.RosPack()
+            paket_yolu = rospack.get_path('final_odev')
+            dosya_yolu = os.path.join(paket_yolu, 'temizlik_raporu.txt')
+            
+            with open(dosya_yolu, "w") as dosya:
+                for satir in satirlar:
+                    dosya.write(satir + "\n")
+            
+            rospy.loginfo(f"📄 Rapor dosyaya kaydedildi: {dosya_yolu}")
+        except Exception as e:
+            rospy.logerr(f"Rapor dosyaya yazılamadı: {e}")
 
     def baslat(self):
         if not self.bolgeler:
