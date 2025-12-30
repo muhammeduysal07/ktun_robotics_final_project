@@ -1,0 +1,12 @@
+
+
+╔════════════════════════════════════════╗
+║          FİNAL TEMİZLİK RAPORU         ║
+╠════════════════════════════════════════╣
+║ SALON: TEMİZLENDİ (BAŞARILI)           ║
+║ MUTFAK: TEMİZLENDİ (BAŞARILI)          ║
+║ KORIDOR: TEMİZLENDİ (BAŞARILI)         ║
+║ YATAKODASI: TEMİZLENDİ (BAŞARILI)      ║
+╚════════════════════════════════════════╝
+
+
