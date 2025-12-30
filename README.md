@@ -98,7 +98,29 @@ SALON:
     - {x: -3.76, y: 1.07, z: 0.0, w: 1.0}
 Yeni bir oda eklemek veya koordinat değiştirmek için bu dosyayı düzenlemek yeterlidir.
 
-📹 Demo Videosu
-Projenin çalışır haldeki demo videosu ve raporlama çıktısı aşağıdaki bağlantıdadır: (Buraya Video Linki Eklenecek)
+## 📹 Demo Videosu ve Senaryo Akışı
+
+Aşağıdaki demo videosunda proje, tüm gereksinimleri karşılayacak şekilde çalıştırılmıştır. Videodaki işlem basamakları şunlardır:
+
+**1. Başlatma Aşaması:**
+* **00:00 - 00:15:** `final_app.launch` ile Gazebo simülasyon ortamı, ev modeli ve QR kodlar yüklendi.
+* **00:15 - 00:25:** `turtlebot3_navigation` başlatıldı. Robot, AMCL algoritması ile harita üzerinde konumunu (Initial Pose) başarıyla buldu.
+* **00:27:** `rqt_image_view` aracı açılarak robotun kamera akışı (Gözü) ekrana yansıtıldı.
+
+**2. Görev İcrası:**
+* **00:37:** `gorev_yoneticisi.py` ana düğümü çalıştırıldı ve `mission.yaml` dosyası okundu.
+* **00:40 - 01:00 (Salon):** Robot Salon girişine gitti, QR kodu ("ROOM=SALON") doğruladı ve temizlik rotasını tamamladı.
+* **01:35 - 02:20 (Mutfak):** Robot Mutfak girişine gitti, QR doğrulamasını yaptı ve temizlik noktalarını gezdi.
+* **02:20 - 03:00 (Koridor):** Koridor görevi başarıyla tamamlandı.
+* **03:00 - 04:30 (Yatak Odası):** Robot en uzak nokta olan Yatak Odası'na gidip görevi tamamladı.
+
+**3. Raporlama ve Sonuç:**
+* **06:00:** Görev bitiminde terminal ekranına detaylı **"Final Temizlik Raporu"** tablosu basıldı.
+* **06:05:** Proje klasörü içerisinde otomatik oluşturulan `temizlik_raporu.txt` dosyası açılarak raporun kalıcı olarak kaydedildiği doğrulandı.
+
+### ▶️ Videoyu İzle
+
+Projeyi canlı çalışırken izlemek için aşağıdaki bağlantıya tıklayabilirsiniz:
+[**Süpürge Robotu Final Demosunu İzle (Dosya)**](./Demo_video.mp4)
 
 Hazırlayan: Muhammed Mustafa Uysal Tarih: Aralık 2025
