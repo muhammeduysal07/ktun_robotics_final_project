@@ -8,7 +8,7 @@ import yaml
 import os
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
-from geometry_msgs.msg import Twist  # Hareket için gerekli
+from geometry_msgs.msg import Twist
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from pyzbar.pyzbar import decode
 
@@ -19,7 +19,6 @@ class RobotGorev:
         self.sonuc_raporu = {} 
         self.bolgeler = {}
         
-        # --- DOSYA OKUMA İŞLEMİ (MISSION.YAML) ---
         try:
             rospack = rospkg.RosPack()
             dosya_yolu = os.path.join(rospack.get_path('final_odev'), 'config', 'mission.yaml')
@@ -33,14 +32,12 @@ class RobotGorev:
             rospy.logerr(f"DOSYA OKUMA HATASI: {e}")
             return
 
-        # Sıralama
         self.gorev_sirasi = ["SALON", "MUTFAK", "KORIDOR", "YATAKODASI"]
 
         self.bridge = CvBridge()
         self.son_okunan_qr = None
         self.kamera_aktif = False 
         
-        # Hareket Yayıncısı (Kurtarma manevraları için)
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
         self.client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
@@ -58,7 +55,6 @@ class RobotGorev:
         except CvBridgeError as e: rospy.logerr(e)
 
     def manuel_hareket(self, lin_x, ang_z, sure):
-        """ Robotu manuel olarak hareket ettirir (Kurtarma için) """
         msg = Twist()
         msg.linear.x = lin_x
         msg.angular.z = ang_z
@@ -68,60 +64,49 @@ class RobotGorev:
             self.cmd_vel_pub.publish(msg)
             rospy.sleep(0.1)
             
-        # Durdur
         msg.linear.x = 0
         msg.angular.z = 0
         self.cmd_vel_pub.publish(msg)
-        rospy.sleep(0.5) # Durunca görüntü netleşsin diye bekle
+        rospy.sleep(0.5)
 
     def qr_ara_ve_bul(self):
-        """ QR Kodu arar, bulamazsa hareket edip tekrar dener """
         self.son_okunan_qr = None
         self.kamera_aktif = True
         
-        # 1. DENEME: Olduğun yerde bak (3 saniye)
         rospy.loginfo("👀 1. Deneme: Sabit bakılıyor...")
         baslangic = rospy.Time.now()
         while (rospy.Time.now() - baslangic).to_sec() < 3.0:
             if self.son_okunan_qr: return self.son_okunan_qr
             rospy.sleep(0.1)
             
-        # Bulunamadıysa...
-        
-        # 2. DENEME: Biraz Geri Çekil (Çok yakınsa göremez)
         rospy.logwarn("⚠️ QR Görünmedi. Biraz geri çekiliniyor...")
-        self.manuel_hareket(-0.15, 0.0, 1.5) # 15 cm/s hızla 1.5 sn geri
+        self.manuel_hareket(-0.15, 0.0, 1.5) 
         
         baslangic = rospy.Time.now()
         while (rospy.Time.now() - baslangic).to_sec() < 2.0:
             if self.son_okunan_qr: return self.son_okunan_qr
             rospy.sleep(0.1)
 
-        # 3. DENEME: Sağa Dön Bak
         rospy.logwarn("⚠️ Hala yok. Sağa bakılıyor...")
-        self.manuel_hareket(0.0, -0.3, 1.0) # Sağa dön
+        self.manuel_hareket(0.0, -0.3, 1.0) 
         
         baslangic = rospy.Time.now()
         while (rospy.Time.now() - baslangic).to_sec() < 2.0:
             if self.son_okunan_qr: return self.son_okunan_qr
             rospy.sleep(0.1)
             
-        # 4. DENEME: Sola Dön Bak (Önce ortala sonra sola git)
         rospy.logwarn("⚠️ Hala yok. Sola bakılıyor...")
-        self.manuel_hareket(0.0, 0.6, 1.0) # Sola dön (daha çok dön ki diğer tarafı gör)
+        self.manuel_hareket(0.0, 0.6, 1.0) 
         
         baslangic = rospy.Time.now()
         while (rospy.Time.now() - baslangic).to_sec() < 2.0:
             if self.son_okunan_qr: return self.son_okunan_qr
             rospy.sleep(0.1)
             
-        return None # Hiçbir şekilde bulunamadı
+        return None 
 
     def hedefe_git(self, koordinat, mesaj):
-        """
-        Hedefe gitmeye çalışır. Başarısız olursa 1 kez daha dener.
-        """
-        MAX_DENEME = 2  # İlk deneme + 1 tekrar
+        MAX_DENEME = 2 
         
         for deneme in range(1, MAX_DENEME + 1):
             goal = MoveBaseGoal()
@@ -139,16 +124,13 @@ class RobotGorev:
 
             self.client.send_goal(goal)
             
-            # Sonucu bekle
             wait = self.client.wait_for_result()
             state = self.client.get_state()
 
-            # Eğer başarılıysa (State 3 = SUCCEEDED)
             if wait and state == 3:
                 return True
             
-            # Başarısızsa döngü başa döner ve tekrar dener
-            rospy.sleep(1.0) # Robot bi nefes alsın
+            rospy.sleep(1.0) 
 
         rospy.logerr(f"❌ HEDEFE GİDİLEMEDİ: {mesaj}")
         return False
@@ -156,7 +138,6 @@ class RobotGorev:
     def qr_dogrula_ve_temizle(self, oda_ismi):
         rospy.loginfo(f"{oda_ismi} kapısına gelindi. QR taranıyor...")
         
-        # YENİ FONKSİYONU ÇAĞIRIYORUZ (Hareketli Arama)
         bulunan_qr = self.qr_ara_ve_bul()
         self.kamera_aktif = False
         
@@ -195,7 +176,6 @@ class RobotGorev:
             return False
 
     def raporu_yazdir(self):
-        # Rapor içeriğini hazırla
         satirlar = []
         satirlar.append("\n")
         satirlar.append("╔════════════════════════════════════════╗")
@@ -210,13 +190,10 @@ class RobotGorev:
         satirlar.append("╚════════════════════════════════════════╝")
         satirlar.append("\n")
 
-        # 1. TERMİNALE BAS (Hocanın videoda görmesi için)
         for satir in satirlar:
             rospy.loginfo(satir)
 
-        # 2. DOSYAYA KAYDET (Dosya çıktısı istediği için)
         try:
-            # Dosyayı /home/muhammed/robotg_ws/src/final_odev/ konumuna kaydeder
             rospack = rospkg.RosPack()
             paket_yolu = rospack.get_path('final_odev')
             dosya_yolu = os.path.join(paket_yolu, 'temizlik_raporu.txt')
