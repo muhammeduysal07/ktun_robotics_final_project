@@ -118,9 +118,4 @@ Aşağıdaki demo videosunda proje, tüm gereksinimleri karşılayacak şekilde 
 * **06:00:** Görev bitiminde terminal ekranına detaylı **"Final Temizlik Raporu"** tablosu basıldı.
 * **06:05:** Proje klasörü içerisinde otomatik oluşturulan `temizlik_raporu.txt` dosyası açılarak raporun kalıcı olarak kaydedildiği doğrulandı.
 
-### ▶️ Videoyu İzle
-
-Projeyi canlı çalışırken izlemek için aşağıdaki bağlantıya tıklayabilirsiniz:
-[**Süpürge Robotu Final Demosunu İzle (Dosya)**](https://github.com/muhammeduysal07/ktun_robotics_final_project/blob/main/Demo_video.mp4)
-
 Hazırlayan: Muhammed Mustafa Uysal Tarih: Aralık 2025
