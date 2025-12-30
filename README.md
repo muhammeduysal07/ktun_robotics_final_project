@@ -121,6 +121,6 @@ Aşağıdaki demo videosunda proje, tüm gereksinimleri karşılayacak şekilde 
 ### ▶️ Videoyu İzle
 
 Projeyi canlı çalışırken izlemek için aşağıdaki bağlantıya tıklayabilirsiniz:
-[**Süpürge Robotu Final Demosunu İzle (Dosya)**](./Demo_video.mp4)
+[**Süpürge Robotu Final Demosunu İzle (Dosya)**](https://github.com/muhammeduysal07/ktun_robotics_final_project/blob/main/Demo_video.mp4)
 
 Hazırlayan: Muhammed Mustafa Uysal Tarih: Aralık 2025
