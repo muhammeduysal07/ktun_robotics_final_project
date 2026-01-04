@@ -15,15 +15,9 @@ class RobotGorev:
         
         # --- RAPOR LİSTESİ (YENİ) ---
         self.sonuc_raporu = {} 
-
-        # --- KOORDİNATLAR (Senin Ayarların) ---
         self.bolgeler = {
             "SALON": {
-                # Kapı Girişi (Senin İlk Aldığın Koordinatlar)
                 "Giris":      {'x': -0.7384400599893532,  'y': 1.1176209288360368, 'z': -0.0498330199734705, 'w': 0.998757563235605},
-                
-                # Temizlik Noktaları (Haritadan Tıkladıkların)
-                # Sadece x ve y'yi değiştir, z ve w böyle kalsın.
                 "Temizlik_1": {'x': -1.0966168642044067,  'y': 3.5416643619537354,  'z': 0.0, 'w': 1.0}, 
                 "Temizlik_2": {'x': -3.7649736404418945, 'y': 1.073171854019165,  'z': 0.0, 'w': 1.0},
                 "Temizlik_3": {'x': -0.8032229542732239, 'y': 1.2328864336013794,  'z': 0.0, 'w': 1.0}
@@ -121,7 +115,6 @@ class RobotGorev:
             self.temizlik_turu_yap(oda_ismi)
             durum = "QR OKUNAMADI / TEMİZLENDİ"
         
-        # Raporu Güncelle
         self.sonuc_raporu[oda_ismi] = durum
 
     def temizlik_turu_yap(self, oda_ismi):
@@ -157,8 +150,6 @@ class RobotGorev:
             else:
                 rospy.logwarn(f"{oda} kapısına gidilemedi!")
                 self.sonuc_raporu[oda] = "ULAŞILAMADI"
-
-        # En sonda raporu bas
         self.raporu_yazdir()
         rospy.loginfo("GÖREV TAMAMLANDI. ROBOT ŞARJA GİDEBİLİR.")
 
