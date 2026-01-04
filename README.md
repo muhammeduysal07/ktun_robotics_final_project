@@ -28,7 +28,6 @@ final_odev/
 │   └── gorev_yoneticisi.py # Ana Python düğümü (Görev yönetimi, QR okuma, Raporlama).
 ├── world/
 │   ├── final_world.world  # QR kodların yerleştirildiği Gazebo dünya dosyası.
-│   └── models/            # QR kod posterleri ve zemin modelleri.
 ├── CMakeLists.txt
 ├── package.xml
 └── README.md
