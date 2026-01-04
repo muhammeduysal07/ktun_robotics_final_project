@@ -31,6 +31,7 @@ final_odev/
 ├── CMakeLists.txt
 ├── package.xml
 └── README.md
+└── Demo_video.mp4
 
 ⚙️ Gereksinimler ve Kurulum
 Bu projenin çalıştırılabilmesi için aşağıdaki bağımlılıkların kurulu olması gerekmektedir:
